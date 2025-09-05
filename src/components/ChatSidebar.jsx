@@ -77,7 +77,7 @@ export default function ChatSidebar({ editor, onAiEdit }) {
             </div>
           </div>
         ))}
-        {loading && <div className="text-gray-400"><span className="loader"></span></div>}
+        {loading && <div className="text-gray-400">Thinking...</div>}
       </div>
 
       {/* Input box */}
