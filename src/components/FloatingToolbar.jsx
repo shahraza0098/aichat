@@ -8,6 +8,7 @@ export default function FloatingToolbar({ editor, onAiApply }) {
   const [suggestion, setSuggestion] = useState("")
   const [original, setOriginal] = useState("")
   const [coords, setCoords] = useState(null)
+  const [loading, setLoading] = useState(false)
   const toolbarRef = useRef(null)
 
   if (!editor) return null
@@ -35,6 +36,7 @@ export default function FloatingToolbar({ editor, onAiApply }) {
   }, [editor])
 
   const handleAiEdit = async () => {
+    setLoading(true)
     if (!coords) return
     const { from, to } = coords
     const selectedText = editor.state.doc.textBetween(from, to)
@@ -42,6 +44,7 @@ export default function FloatingToolbar({ editor, onAiApply }) {
 
     const res = await axios.post("/api/chat", { selection: selectedText })
     setSuggestion(res.data.edit)
+    setLoading(false)
     setShowModal(true)
   }
 
@@ -60,7 +63,7 @@ export default function FloatingToolbar({ editor, onAiApply }) {
             className="px-2 py-1 bg-green-500 text-white rounded"
             onClick={handleAiEdit}
           >
-             Edit with AI
+             {loading ? <div><span className="loading loading-ring loading-lg"></span></div>: "AI Edit"}
           </button>
         </div>
       )}
